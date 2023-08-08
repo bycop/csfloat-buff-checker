@@ -1,6 +1,7 @@
 ## CSFloat - Buff prices checker [API]
 
 ### Installation
+For this api you'll need to have node.js installed (https://nodejs.org/fr)
 ```sh
 npm install
 ```
