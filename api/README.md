@@ -1,17 +1,22 @@
 ## CSFloat - Buff prices checker [API]
 
 ### Installation
-For this api you'll need to have node.js installed (https://nodejs.org/fr)
+- For this api you'll need to have node.js installed (https://nodejs.org/fr)
+- When you've nodejs installed, copy the path where the `api` folder is located in your explorer
+- Open a `cmd.exe` (Win + R > cmd.exe)
+- Write `cd path/to/api` and press enter
+- Then run these two commands:
+
 ```sh
 npm install
 ```
 
-### Usage
+### Start the api
 ```sh
 npm run start
 ```
 
-### Use https version
+### Use https version [OPTIONAL]
 Add these 2 things
 ```ts
 import * as fs from 'fs';
