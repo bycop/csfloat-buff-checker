@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "CSFloat price to Buff price",
+  "version": "1.0",
+  "description": "Check price of any CSFloat offers on Buff163.",
+  "permissions": [
+    "activeTab",
+    "https://csfloat.com/",
+    "http://localhost:3000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://csfloat.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "externally_connectable": {
+    "matches": [
+      "http://localhost:3000/*"
+    ]
+  }
+}
