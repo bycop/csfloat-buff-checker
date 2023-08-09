@@ -1,36 +1,39 @@
 {
-  "manifest_version": 2,
-  "name": "CSFloat price to Buff price",
-  "version": "1.0",
-  "description": "Check price of any CSFloat offers on Buff163.",
-  "icons": {
-	  "16": "icons/logo_16.png",
-	  "32": "icons/logo_32.png",
-	  "48": "icons/logo_48.png",
-	  "128": "icons/logo_128.png"
-  },
-  "browser_action": {
-  },
-  "permissions": [
-    "activeTab",
-    "https://csfloat.com/",
-    "http://localhost:3000/*",
-	  "https://github.com/bycop"
-  ],
-  "content_scripts": [
-    {
-      "matches": ["https://csfloat.com/*"],
-      "js": ["content.js"]
-    }
-  ],
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
-  "externally_connectable": {
-    "matches": [
-      "http://localhost:3000/*",
-	    "https://github.com/bycop"
-    ]
-  }
+	"manifest_version": 3,
+	"name": "CSFloat price to Buff price",
+	"version": "1.0",
+	"description": "Check price of any CSFloat offers on Buff163.",
+	"icons": {
+		"16": "icons/logo_16.png",
+		"32": "icons/logo_32.png",
+		"48": "icons/logo_48.png",
+		"128": "icons/logo_128.png"
+	},
+	"action": {
+		"default_title": "Like this project ? Click me"
+	},
+	"host_permissions": [
+		"https://csfloat.com/*",
+		"http://localhost:3000/*",
+		"https://github.com/bycop"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"https://csfloat.com/*"
+			],
+			"js": [
+				"content.js"
+			]
+		}
+	],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"externally_connectable": {
+		"matches": [
+			"http://localhost:3000/*",
+			"https://github.com/bycop"
+		]
+	}
 }

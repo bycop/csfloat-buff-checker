@@ -1,8 +1,10 @@
 function injectContentScript(tabId) {
-	chrome.scripting.executeScript({
-		target: { tabId: tabId },
-		files: ['content.js'],
-	});
+	if (chrome.scription) {
+		chrome.scripting.executeScript({
+			target: { tabId: tabId },
+			files: ['content.js'],
+		});
+	}
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -11,7 +13,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	}
 });
 
-chrome.browserAction.onClicked.addListener(function (tab) {
+chrome.action.onClicked.addListener(function (tab) {
   chrome.tabs.create({'url': "https://github.com/bycop"}, function (tab) {
   });
 });
