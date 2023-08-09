@@ -1,28 +1,26 @@
-# CSFloat Buff price checker
-
-### Description
-A chrome extension to compare prices between CSFloat offers and Buff163.
-
-This project is on GitHub to be selfhosted by those who wants to use this extension for free, no one needs to pay 200$ to have this little extension.
-
-The api use the steaminventory-helper api to get prices of Buff.
-
-This extension can be incomplete and not perfect but feel free to open a Pull request if you've any interesting feature to submit !
+## CSFloat - Buff prices checker [Extension]
 
 ### Installation
-You've in each folder a README to help you for the installation of the api and the chrome extension.
+- Download or clone this repository
+- Put your chrome / chromium in dev mode on the `chrome://extensions`
+- And to add the extension click on `load unpacked extension` and select the `extension` folder
 
-Feel free to create an issue if you need help on anything.
+If you want to change the api url, change the `http://localhost:3000` in `manifest.json` and `content.js`
+
+### Usage
+If the extension and the api are configured and are running/enabled, you can just go on any item on csfloat.com and you'll see the price comparison with Buff.
+
+You'll see the Buff price on all items url like https://csfloat.com/item/id 
 
 ### Examples
 
 When a price is lower than the Buff price, you'll see it in green with a `(+25%)` by example to show the profit you could make by reselling to Buff.
 
-<img src="assets/profit.png" width="75%"/>
+<img src="../assets/profit.png" width="75%"/>
 
 When a price is higher than the Buff price, you'll see it in red with a `(-25%)` by example to show the loss you will make by reselling to Buff.
 
-<img src="assets/loss.png" width="75%"/>
+<img src="../assets/loss.png" width="75%"/>
 
 ### Support
 You like this work and you want to help me hosting my projects ? Feel free to Buy me a Coffee
