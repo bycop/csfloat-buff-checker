@@ -16,6 +16,8 @@ With this version, you'll just have to drag and drop a folder into your chrome e
 
 [Check the latest release here](https://github.com/bycop/csfloat-buff-checker/releases/latest)
 
+(Note: A Chrome web store version of this extension is waiting approval)
+
 ### Api version
 You've in each folder of `api-version` a README to help you for the installation of the api and the chrome extension.
 
