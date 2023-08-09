@@ -15,7 +15,7 @@ With this version, you'll just have to drag and drop a folder into your chrome e
 -> Go in `no-api-version` folder for more details
 
 ### Api version
-You've in each folder (`api` and `extension`) a README to help you for the installation of the api and the chrome extension.
+You've in each folder of `api-version` a README to help you for the installation of the api and the chrome extension.
 
 This version will require you to make some commands and maybe modifications if you need to host the api on a server.
 

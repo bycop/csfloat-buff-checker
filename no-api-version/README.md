@@ -1,4 +1,4 @@
-## CSFloat - Buff prices checker [Full Version]
+# CSFloat - Buff prices checker [No API Version]
 This version doesn't require to setup the `api`
 
 ### Installation
