@@ -10,3 +10,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		injectContentScript(tabId);
 	}
 });
+
+chrome.browserAction.onClicked.addListener(function (tab) {
+  chrome.tabs.create({'url': "https://github.com/bycop"}, function (tab) {
+  });
+});

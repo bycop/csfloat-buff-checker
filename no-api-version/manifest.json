@@ -3,10 +3,19 @@
   "name": "CSFloat price to Buff price",
   "version": "1.0",
   "description": "Check price of any CSFloat offers on Buff163.",
+  "icons": {
+	  "16": "icons/logo_16.png",
+	  "32": "icons/logo_32.png",
+	  "48": "icons/logo_48.png",
+	  "128": "icons/logo_128.png"
+  },
+  "browser_action": {
+  },
   "permissions": [
     "activeTab",
     "https://csfloat.com/",
-    "https://api.steaminventoryhelper.com/*"
+    "https://api.steaminventoryhelper.com/*",
+	  "https://github.com/bycop"
   ],
   "content_scripts": [
     {
@@ -20,7 +29,8 @@
   },
   "externally_connectable": {
     "matches": [
-      "https://api.steaminventoryhelper.com/*"
+      "https://api.steaminventoryhelper.com/*",
+	    "https://github.com/bycop"
     ]
   }
 }
