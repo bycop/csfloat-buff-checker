@@ -1,14 +1,13 @@
-## CSFloat - Buff prices checker [Extension]
+## CSFloat - Buff prices checker [Full Version]
+This version doesn't require to setup the `api`
 
 ### Installation
 - Download or clone this repository
 - Put your chrome / chromium in dev mode on the `chrome://extensions`
-- And to add the extension click on `load unpacked extension` and select the `extension` folder
-
-If you want to change the api url, change the `http://localhost:3000` in `manifest.json` and `content.js`
+- And to add the extension click on `load unpacked extension` and select the `no-api-version` folder
 
 ### Usage
-If the extension and the api are configured and are running/enabled, you can just go on any item on csfloat.com and you'll see the price comparison with Buff.
+If the extension is well installed you can just go on any item on csfloat.com and you'll see the price comparison with Buff.
 
 You'll see the Buff price on all items url like https://csfloat.com/item/id 
 
