@@ -13,6 +13,7 @@ This extension can be incomplete and not perfect but feel free to open a Pull re
 ### No api version (full version)
 With this version, you'll just have to drag and drop a folder into your chrome extensions, easiest way to have the extension working
 -> Go in `no-api-version` folder for more details
+-> [Check the latest release here](https://github.com/bycop/csfloat-buff-checker/releases/latest)
 
 ### Api version
 You've in each folder of `api-version` a README to help you for the installation of the api and the chrome extension.
