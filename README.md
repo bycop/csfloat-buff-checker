@@ -3,6 +3,8 @@
 ## Description
 A chrome extension to compare prices between CSFloat offers and Buff163.
 
+Chrome extension link: https://chrome.google.com/webstore/detail/csfloat-price-to-buff-pri/lfgejbipklggolmlfkmopkbjjakiljpg/related?hl=fr&authuser=0
+
 This project is on GitHub to be selfhosted by those who wants to use this extension for free, no one needs to pay 200$ to have this little extension.
 
 The api use the steaminventory-helper api to get prices of Buff.
@@ -15,8 +17,6 @@ With this version, you'll just have to drag and drop a folder into your chrome e
 -> Go in `no-api-version` folder for more details
 
 [Check the latest release here](https://github.com/bycop/csfloat-buff-checker/releases/latest)
-
-(Note: A Chrome web store version of this extension is waiting approval)
 
 ### Api version
 You've in each folder of `api-version` a README to help you for the installation of the api and the chrome extension.
