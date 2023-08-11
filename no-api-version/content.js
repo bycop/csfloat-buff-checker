@@ -1,3 +1,4 @@
+let settings = undefined;
 
 function parseItem(name, details) {
 
@@ -122,7 +123,7 @@ async function copyAndPasteItemName() {
   newDiv.id = 'buff-price';
 
   if (!price && price !== 0) {
-    newDiv.style.color = 'red';
+    newDiv.style.color = settings.lossColor;
     newDiv.textContent = 'No price found';
   } else {
     const actualPrice = ngStarInsertedDiv.textContent.trim();
@@ -133,14 +134,14 @@ async function copyAndPasteItemName() {
     const discount = Math.round(differencePercentage);
 
     if (isNaN(discount)) {
-      newDiv.style.color = 'orange';
+      newDiv.style.color = settings.neutralColor;
       newDiv.textContent = `$${price}`;
     }
     else if (actualPriceNumber < price) {
-      newDiv.style.color = 'green';
+      newDiv.style.color = settings.profitColor;
       newDiv.textContent = `$${price} (+${discount}%)`;
     } else {
-      newDiv.style.color = 'red';
+      newDiv.style.color = settings.lossColor;
       newDiv.textContent = `$${price} (${discount}%)`;
     }
   }
@@ -165,3 +166,12 @@ setInterval(() => {
     copyAndPasteItemName();
   }
 }, 1000);
+
+chrome.runtime.sendMessage({ action: 'getSettings' }, function (response) {
+  settings = {
+    enableStickers: response.enableStickers || true,
+    profitColor: response.profitColor || '#00FF00',
+    lossColor: response.lossColor || '#FF0000',
+    neutralColor: response.neutralColor || '#FFA500',
+  }
+});
