@@ -1,4 +1,3 @@
-
 function parseItem(name, details) {
 
   const item = {
@@ -71,19 +70,19 @@ async function getBuffPrice(name) {
   }
 }
 
-function findItemNameInContainer(container) {
+function findInContainer(container, className) {
   if (!container) return null;
   const children = container.children;
 
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
 
-    if (child.classList.contains('item-name')) {
+    if (child.classList.contains(className)) {
       return child;
     }
 
     if (child.children.length > 0) {
-      const result = findItemNameInContainer(child);
+      const result = findInContainer(child, className);
       if (result) {
         return result;
       }
@@ -93,12 +92,37 @@ function findItemNameInContainer(container) {
   return null;
 }
 
+async function getItemStickerPrice(container) {
+  let totalStickerPrice = 0;
+
+  const stickerContainer = findInContainer(container, 'sticker-container');
+
+  const stickerRefs = [...stickerContainer.getElementsByTagName('img')].map(img =>
+    img.getAttribute('aria-describedby')
+  );
+
+  for (let i = 0; i < stickerRefs.length; i++) {
+    const stickerRef = stickerRefs[i];
+    const stickerText = document.querySelector(`#${stickerRef}`).innerHTML;
+
+    if(!stickerText.includes('0%')) continue;
+
+    const sticker = stickerText.match(/^.*(?=\s\d+%)/)
+
+    const stickerPrice = await getBuffPrice(sticker);
+
+    totalStickerPrice += stickerPrice;
+  }
+
+  return totalStickerPrice;
+}
+
 async function copyAndPasteItemName() {
   const cdkOverlayContainer = document.querySelector('.cdk-overlay-container');
 
   if (!cdkOverlayContainer) return null;
 
-  const itemNameElement = findItemNameInContainer(cdkOverlayContainer);
+  const itemNameElement = findInContainer(cdkOverlayContainer, 'item-name');
 
   if (!itemNameElement || !itemNameElement.nextElementSibling) return null;
 
@@ -110,6 +134,7 @@ async function copyAndPasteItemName() {
   const name = formatItem(item);
 
   const price = await getBuffPrice(name);
+  const stickerPrice = await getItemStickerPrice(cdkOverlayContainer)
 
   if (!ngStarInsertedDiv) return null;
 
