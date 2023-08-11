@@ -48,10 +48,7 @@ function formatItem(item) {
   return `${item.star ? "★ " : ""}${item.special ? item.special + " " : ""}${item.name}${item.quality !== "Not painted" ? ` (${item.quality})` : ''}`;
 }
 
-async function getBuffPrice(itemName, itemDetails) {
-  const item = parseItem(itemName, itemDetails);
-  const name = formatItem(item);
-
+async function getBuffPrice(name) {
   try {
     const response = await fetch('https://api.steaminventoryhelper.com/v2/live-prices/getPrices', {
       method: 'POST',
@@ -109,9 +106,16 @@ async function copyAndPasteItemName() {
   const divTextContent = divElement.textContent.trim();
   const ngStarInsertedDiv = cdkOverlayContainer.querySelector('.price.ng-star-inserted, .price .ng-star-inserted');
 
-  const price = await getBuffPrice(itemNameElement.innerText, divTextContent);
+  const item = parseItem(itemNameElement.innerText, divTextContent);
+  const name = formatItem(item);
+
+  const price = await getBuffPrice(name);
 
   if (!ngStarInsertedDiv) return null;
+
+  const parentDiv = document.createElement('div');
+  parentDiv.style.display = 'flex';
+  parentDiv.style.justifyContent = 'center';
 
   const newDiv = document.createElement('div');
   newDiv.style.fontSize = '20px';
@@ -141,7 +145,17 @@ async function copyAndPasteItemName() {
     }
   }
 
-  ngStarInsertedDiv.parentNode.insertBefore(newDiv, ngStarInsertedDiv.nextSibling);
+  parentDiv.appendChild(newDiv);
+
+  // Create a link icon with a href
+  const link = document.createElement('a');
+  link.href = `https://t.sih-db.com/15GzoA?subid1=%2Fmarket%2Fcsgo%23tab%3Dselling%26page_num%3D1%26search%3D${name}&subid2=buff163-side-menu`;
+  link.target = '_blank';
+  link.innerHTML = '<mat-icon _ngcontent-ele-c200="" role="img" class="mat-icon notranslate material-icons mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">link</mat-icon>';
+  link.style.marginLeft = '10px';
+  parentDiv.appendChild(link);
+
+  ngStarInsertedDiv.parentNode.insertBefore(parentDiv, ngStarInsertedDiv.nextSibling);
 }
 
 setInterval(() => {
