@@ -6,6 +6,12 @@ This version doesn't require to setup the `api`
 - Put your chrome / chromium in dev mode on the `chrome://extensions`
 - And to add the extension click on `load unpacked extension` and select the `no-api-version` folder
 
+### Customization
+Right click on the extension icon and click on "Options"
+
+Then you'll have this page to customize the extension
+<img src="../assets/options.png" width="75%"/>
+
 ### Usage
 If the extension is well installed you can just go on any item on csfloat.com and you'll see the price comparison with Buff.
 
