@@ -185,10 +185,10 @@ async function copyAndPasteItemName() {
     }
     else if (discountSticker < 50 && discountSticker > 0) {
       newStickerDiv.style.color = 'green';
-      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CC)`;
+      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
     } else {
       newStickerDiv.style.color = 'red';
-      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CC)`;
+      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
     }
   }
 
