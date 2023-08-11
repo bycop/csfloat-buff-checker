@@ -141,14 +141,19 @@ async function copyAndPasteItemName() {
   const parentDiv = document.createElement('div');
   parentDiv.style.display = 'flex';
   parentDiv.style.justifyContent = 'center';
+  parentDiv.style.gap = '10px';
 
-  const newDiv = document.createElement('div');
-  newDiv.style.fontSize = '20px';
-  newDiv.id = 'buff-price';
+  const newPriceDiv = document.createElement('div');
+  newPriceDiv.style.fontSize = '20px';
+  newPriceDiv.id = 'buff-price';
+
+  const newStickerDiv = document.createElement('div');
+  newStickerDiv.style.fontSize = '20px';
+  newStickerDiv.id = 'sticker-price';
 
   if (!price && price !== 0) {
-    newDiv.style.color = 'red';
-    newDiv.textContent = 'No price found';
+    newPriceDiv.style.color = 'red';
+    newPriceDiv.textContent = 'No price found';
   } else {
     const actualPrice = ngStarInsertedDiv.textContent.trim();
     const actualPriceNumber = parseFloat(actualPrice.replace('$', '').replace(',', ''));
@@ -158,19 +163,38 @@ async function copyAndPasteItemName() {
     const discount = Math.round(differencePercentage);
 
     if (isNaN(discount)) {
-      newDiv.style.color = 'orange';
-      newDiv.textContent = `$${price}`;
+      newPriceDiv.style.color = 'orange';
+      newPriceDiv.textContent = `$${price}`;
     }
     else if (actualPriceNumber < price) {
-      newDiv.style.color = 'green';
-      newDiv.textContent = `$${price} (+${discount}%)`;
+      newPriceDiv.style.color = 'green';
+      newPriceDiv.textContent = `$${price} (+${discount}%)`;
     } else {
-      newDiv.style.color = 'red';
-      newDiv.textContent = `$${price} (${discount}%)`;
+      newPriceDiv.style.color = 'red';
+      newPriceDiv.textContent = `$${price} (${discount}%)`;
+    }
+
+    const priceWithStickers = price + stickerPrice //cost to 4x craft on buff
+    const differenceWithStickers = priceWithStickers - actualPriceNumber  
+    const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
+    const discountSticker = Math.round(differenceStickersPercentage);
+
+    if (isNaN(discountSticker)) {
+      newStickerDiv.style.color = 'orange';
+      newStickerDiv.textContent = `${discountSticker}%`;
+    }
+    else if (discountSticker < 50 && discountSticker > 0) {
+      newStickerDiv.style.color = 'green';
+      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CC)`;
+    } else {
+      newStickerDiv.style.color = 'red';
+      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CC)`;
     }
   }
 
-  parentDiv.appendChild(newDiv);
+  parentDiv.appendChild(newPriceDiv);
+  parentDiv.appendChild(newStickerDiv);
+
 
   // Create a link icon with a href
   const link = document.createElement('a');
