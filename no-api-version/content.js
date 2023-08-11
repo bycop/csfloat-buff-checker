@@ -94,8 +94,9 @@ function findInContainer(container, className) {
 
 async function getItemStickerPrice(container) {
   let totalStickerPrice = 0;
-
-  const stickerContainer = findInContainer(container, 'sticker-container');
+  const itemContainer = findInContainer(container, 'item-grid');
+  const stickerContainer = findInContainer(itemContainer, 'sticker-container');
+  if (!stickerContainer) return null;
 
   const stickerRefs = [...stickerContainer.getElementsByTagName('img')].map(img =>
     img.getAttribute('aria-describedby')
@@ -104,7 +105,6 @@ async function getItemStickerPrice(container) {
   for (let i = 0; i < stickerRefs.length; i++) {
     const stickerRef = stickerRefs[i];
     const stickerText = document.querySelector(`#${stickerRef}`).innerHTML;
-
     if(!stickerText.includes('0%')) continue;
 
     const sticker = stickerText.match(/^.*(?=\s\d+%)/)
@@ -135,6 +135,7 @@ async function copyAndPasteItemName() {
 
   const price = await getBuffPrice(name);
   const stickerPrice = await getItemStickerPrice(cdkOverlayContainer)
+  console.log(stickerPrice)
 
   if (!ngStarInsertedDiv) return null;
 
@@ -173,27 +174,26 @@ async function copyAndPasteItemName() {
       newPriceDiv.style.color = 'red';
       newPriceDiv.textContent = `$${price} (${discount}%)`;
     }
-
-    const priceWithStickers = price + stickerPrice //cost to 4x craft on buff
-    const differenceWithStickers = priceWithStickers - actualPriceNumber  
+    if(stickerPrice) {
+    const priceWithStickers = price + stickerPrice
     const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
     const discountSticker = Math.round(differenceStickersPercentage);
 
-    if (isNaN(discountSticker)) {
-      newStickerDiv.style.color = 'orange';
-      newStickerDiv.textContent = `${discountSticker}%`;
-    }
-    else if (discountSticker < 50 && discountSticker > 0) {
-      newStickerDiv.style.color = 'green';
-      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
-    } else {
-      newStickerDiv.style.color = 'red';
-      newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
+      if (discountSticker < 50 && discountSticker >= 0 || isNaN(discountSticker)) {
+        newStickerDiv.style.color = 'green';
+        newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
+      }   else {
+        newStickerDiv.style.color = 'red';
+        newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
+      }
     }
   }
 
   parentDiv.appendChild(newPriceDiv);
-  parentDiv.appendChild(newStickerDiv);
+
+  if(stickerPrice){
+    parentDiv.appendChild(newStickerDiv);
+  }
 
 
   // Create a link icon with a href
