@@ -94,10 +94,12 @@ function findInContainer(container, className) {
 
 async function getItemStickerPrice(container) {
   let totalStickerPrice = 0;
+
   const itemContainer = findInContainer(container, 'item-grid');
   const stickerContainer = findInContainer(itemContainer, 'sticker-container');
-  if (!stickerContainer) return null;
 
+  if (!stickerContainer || !settings.enableStickers) return null;
+  
   const stickerRefs = [...stickerContainer.getElementsByTagName('img')].map(img =>
     img.getAttribute('aria-describedby')
   );
@@ -135,18 +137,20 @@ async function copyAndPasteItemName() {
 
   const price = await getBuffPrice(name);
   const stickerPrice = await getItemStickerPrice(cdkOverlayContainer)
-  console.log(stickerPrice)
 
   if (!ngStarInsertedDiv) return null;
 
-  const parentDiv = document.createElement('div');
-  parentDiv.style.display = 'flex';
-  parentDiv.style.justifyContent = 'center';
-  parentDiv.style.gap = '10px';
+  const newPriceParentDiv = document.createElement('div');
+  newPriceParentDiv.style.display = 'flex';
+  newPriceParentDiv.style.justifyContent = 'center';
 
   const newPriceDiv = document.createElement('div');
   newPriceDiv.style.fontSize = '20px';
   newPriceDiv.id = 'buff-price';
+
+  const newStickerParentDiv = document.createElement('div');
+  newStickerParentDiv.style.display = 'flex';
+  newStickerParentDiv.style.justifyContent = 'center';
 
   const newStickerDiv = document.createElement('div');
   newStickerDiv.style.fontSize = '20px';
@@ -164,6 +168,7 @@ async function copyAndPasteItemName() {
     const discount = Math.round(differencePercentage);
 
     if (isNaN(discount)) {
+<<<<<<< Updated upstream
       newPriceDiv.style.color = 'orange';
       newPriceDiv.textContent = `$${price}`;
     }
@@ -184,17 +189,32 @@ async function copyAndPasteItemName() {
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
       }   else {
         newStickerDiv.style.color = 'red';
+=======
+      newPriceDiv.style.color = settings.neutralColor;
+      newPriceDiv.textContent = `$${price}`;
+    }
+    else if (actualPriceNumber < price) {
+      newPriceDiv.style.color = settings.profitColor;
+      newPriceDiv.textContent = `$${price} (+${discount}%)`;
+    } else {
+      newPriceDiv.style.color = settings.lossColor;
+      newPriceDiv.textContent = `$${price} (${discount}%)`;
+    }
+    if(settings.enableStickers && stickerPrice) {
+      const priceWithStickers = price + stickerPrice
+      const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
+      const discountSticker = Math.round(differenceStickersPercentage);
+      console.log(settings.stickerValueThreshold);
+      if (discountSticker < settings.stickerValueThreshold && discountSticker >= 0 || isNaN(discountSticker)) {
+        newStickerDiv.style.color = settings.profitColor;
+        newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
+      }  else {
+        newStickerDiv.style.color = settings.lossColor;
+>>>>>>> Stashed changes
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
       }
     }
   }
-
-  parentDiv.appendChild(newPriceDiv);
-
-  if(stickerPrice){
-    parentDiv.appendChild(newStickerDiv);
-  }
-
 
   // Create a link icon with a href
   const link = document.createElement('a');
@@ -202,9 +222,16 @@ async function copyAndPasteItemName() {
   link.target = '_blank';
   link.innerHTML = '<mat-icon _ngcontent-ele-c200="" role="img" class="mat-icon notranslate material-icons mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">link</mat-icon>';
   link.style.marginLeft = '10px';
-  parentDiv.appendChild(link);
+  
 
-  ngStarInsertedDiv.parentNode.insertBefore(parentDiv, ngStarInsertedDiv.nextSibling);
+  newPriceParentDiv.appendChild(newPriceDiv);
+  newPriceParentDiv.appendChild(link);
+  if(settings.enableStickers){
+    newStickerParentDiv.appendChild(newStickerDiv);
+  }
+
+  ngStarInsertedDiv.parentNode.insertBefore(newPriceParentDiv, ngStarInsertedDiv.nextSibling);
+  newPriceParentDiv.parentNode.insertBefore(newStickerParentDiv, newPriceParentDiv.nextSibling);
 }
 
 setInterval(() => {
@@ -213,4 +240,19 @@ setInterval(() => {
   if (cdkOverlayContainer && cdkOverlayContainer.children.length > 0 && !cdkOverlayContainer.querySelector('#buff-price')) {
     copyAndPasteItemName();
   }
+<<<<<<< Updated upstream
 }, 1000);
+=======
+}, 1000);
+
+chrome.runtime.sendMessage({ action: 'getSettings' }, async function (response) {
+  console.log(response)
+  settings = {
+    enableStickers: response.enableStickers || true,
+    stickerValueThreshold: response.stickerValueThreshold ,
+    profitColor: response.profitColor || '#00FF00',
+    lossColor: response.lossColor || '#FF0000',
+    neutralColor: response.neutralColor || '#FFA500',
+  }
+});
+>>>>>>> Stashed changes
