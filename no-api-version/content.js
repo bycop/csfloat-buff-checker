@@ -168,28 +168,6 @@ async function copyAndPasteItemName() {
     const discount = Math.round(differencePercentage);
 
     if (isNaN(discount)) {
-<<<<<<< Updated upstream
-      newPriceDiv.style.color = 'orange';
-      newPriceDiv.textContent = `$${price}`;
-    }
-    else if (actualPriceNumber < price) {
-      newPriceDiv.style.color = 'green';
-      newPriceDiv.textContent = `$${price} (+${discount}%)`;
-    } else {
-      newPriceDiv.style.color = 'red';
-      newPriceDiv.textContent = `$${price} (${discount}%)`;
-    }
-    if(stickerPrice) {
-    const priceWithStickers = price + stickerPrice
-    const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
-    const discountSticker = Math.round(differenceStickersPercentage);
-
-      if (discountSticker < 50 && discountSticker >= 0 || isNaN(discountSticker)) {
-        newStickerDiv.style.color = 'green';
-        newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
-      }   else {
-        newStickerDiv.style.color = 'red';
-=======
       newPriceDiv.style.color = settings.neutralColor;
       newPriceDiv.textContent = `$${price}`;
     }
@@ -210,7 +188,6 @@ async function copyAndPasteItemName() {
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
       }  else {
         newStickerDiv.style.color = settings.lossColor;
->>>>>>> Stashed changes
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
       }
     }
@@ -240,9 +217,6 @@ setInterval(() => {
   if (cdkOverlayContainer && cdkOverlayContainer.children.length > 0 && !cdkOverlayContainer.querySelector('#buff-price')) {
     copyAndPasteItemName();
   }
-<<<<<<< Updated upstream
-}, 1000);
-=======
 }, 1000);
 
 chrome.runtime.sendMessage({ action: 'getSettings' }, async function (response) {
@@ -255,4 +229,3 @@ chrome.runtime.sendMessage({ action: 'getSettings' }, async function (response) 
     neutralColor: response.neutralColor || '#FFA500',
   }
 });
->>>>>>> Stashed changes
