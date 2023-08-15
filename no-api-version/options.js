@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const enableStickersOption = document.getElementById('enableStickers');
+	const stickerThresholdOption = document.getElementById('stickerThreshold');
 	const profitColorOption = document.getElementById('profitColor');
 	const lossColorOption = document.getElementById('lossColor');
 	const neutralColorOption = document.getElementById('neutralColor');
 	const resetButton = document.getElementById('reset');
 
-	chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor'], (result) => {
+	chrome.storage.local.get(['enableStickers', 'estickerThreshold', 'profitColor', 'lossColor', 'neutralColor'], (result) => {
 		enableStickersOption.checked = result.enableStickers || false;
+		stickerThresholdOption.value = result.estickerThreshold || 50;
 		profitColorOption.value = result.profitColor || '#00FF00';
 		lossColorOption.value = result.lossColor || '#FF0000';
 		neutralColorOption.value = result.neutralColor || '#FFA500';
@@ -15,6 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	enableStickersOption.addEventListener('change', () => {
 		const enableStickers = enableStickersOption.checked;
 		chrome.storage.local.set({'enableStickers': enableStickers});
+	});
+
+	stickerThresholdOption.addEventListener('change', () => {
+		const stickerThreshold = stickerThresholdOption.value;
+		chrome.storage.local.set({'stickerThreshold': stickerThreshold});
 	});
 
 	profitColorOption.addEventListener('change', () => {
@@ -35,11 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	resetButton.addEventListener('click', () => {
 		chrome.storage.local.set({
 			enableStickers: false,
+			stickerThreshold: 50,
 			profitColor: '#00FF00',
 			lossColor: '#FF0000',
 			neutralColor: '#FFA500'
 		});
 		enableStickersOption.checked = false;
+		stickerThresholdOption.value = 50;
 		profitColorOption.value = '#00FF00';
 		lossColorOption.value = '#FF0000';
 		neutralColorOption.value = '#FFA500';

@@ -185,7 +185,7 @@ async function copyAndPasteItemName() {
       const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
       const discountSticker = Math.round(differenceStickersPercentage);
 
-      if (discountSticker < 50 && discountSticker >= 0 || isNaN(discountSticker)) {
+      if (discountSticker < settings.stickerThreshold && discountSticker >= 0 || isNaN(discountSticker)) {
         newStickerDiv.style.color = settings.profitColor;
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
       }  else {
@@ -220,9 +220,10 @@ setInterval(() => {
   }
 }, 1000);
 
-chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor'], (response) => {
+chrome.storage.local.get(['enableStickers', 'stickerThreshold', 'profitColor', 'lossColor', 'neutralColor'], (response) => {
   settings = {
     enableStickers: response.enableStickers || false,
+    stickerThreshold: response.stickerThreshold || 50,
     profitColor: response.profitColor || '#00FF00',
     lossColor: response.lossColor || '#FF0000',
     neutralColor: response.neutralColor || '#FFA500',
