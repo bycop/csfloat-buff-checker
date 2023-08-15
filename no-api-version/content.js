@@ -167,7 +167,7 @@ setInterval(() => {
   }
 }, 1000);
 
-chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor'], function(response) {
+chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor'], (response) => {
   settings = {
     enableStickers: response.enableStickers || false,
     profitColor: response.profitColor || '#00FF00',
