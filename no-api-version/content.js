@@ -72,19 +72,19 @@ async function getBuffPrice(name) {
   }
 }
 
-function findItemNameInContainer(container) {
+function findInContainer(container, className) {
   if (!container) return null;
   const children = container.children;
 
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
 
-    if (child.classList.contains('item-name')) {
+    if (child.classList.contains(className)) {
       return child;
     }
 
     if (child.children.length > 0) {
-      const result = findItemNameInContainer(child);
+      const result = findInContainer(child, className);
       if (result) {
         return result;
       }
@@ -94,12 +94,39 @@ function findItemNameInContainer(container) {
   return null;
 }
 
+async function getItemStickerPrice(container) {
+  let totalStickerPrice = 0;
+
+  const itemContainer = findInContainer(container, 'item-grid');
+  const stickerContainer = findInContainer(itemContainer, 'sticker-container');
+
+  if (!stickerContainer || !settings.enableStickers) return null;
+  
+  const stickerRefs = [...stickerContainer.getElementsByTagName('img')].map(img =>
+    img.getAttribute('aria-describedby')
+  );
+
+  for (let i = 0; i < stickerRefs.length; i++) {
+    const stickerRef = stickerRefs[i];
+    const stickerText = document.querySelector(`#${stickerRef}`).innerHTML;
+    if(!stickerText.includes('0%')) continue;
+
+    const sticker = stickerText.match(/^.*(?=\s\d+%)/)
+
+    const stickerPrice = await getBuffPrice(sticker);
+
+    totalStickerPrice += stickerPrice;
+  }
+
+  return totalStickerPrice;
+}
+
 async function copyAndPasteItemName() {
   const cdkOverlayContainer = document.querySelector('.cdk-overlay-container');
 
   if (!cdkOverlayContainer) return null;
 
-  const itemNameElement = findItemNameInContainer(cdkOverlayContainer);
+  const itemNameElement = findInContainer(cdkOverlayContainer, 'item-name');
 
   if (!itemNameElement || !itemNameElement.nextElementSibling) return null;
 
@@ -111,20 +138,29 @@ async function copyAndPasteItemName() {
   const name = formatItem(item);
 
   const price = await getBuffPrice(name);
+  const stickerPrice = await getItemStickerPrice(cdkOverlayContainer)
 
   if (!ngStarInsertedDiv) return null;
 
-  const parentDiv = document.createElement('div');
-  parentDiv.style.display = 'flex';
-  parentDiv.style.justifyContent = 'center';
+  const newPriceParentDiv = document.createElement('div');
+  newPriceParentDiv.style.display = 'flex';
+  newPriceParentDiv.style.justifyContent = 'center';
 
-  const newDiv = document.createElement('div');
-  newDiv.style.fontSize = '20px';
-  newDiv.id = 'buff-price';
+  const newPriceDiv = document.createElement('div');
+  newPriceDiv.style.fontSize = '20px';
+  newPriceDiv.id = 'buff-price';
+
+  const newStickerParentDiv = document.createElement('div');
+  newStickerParentDiv.style.display = 'flex';
+  newStickerParentDiv.style.justifyContent = 'center';
+
+  const newStickerDiv = document.createElement('div');
+  newStickerDiv.style.fontSize = '20px';
+  newStickerDiv.id = 'sticker-price';
 
   if (!price && price !== 0) {
-    newDiv.style.color = settings.lossColor;
-    newDiv.textContent = 'No price found';
+    newPriceDiv.style.color = settings.lossColor;
+    newPriceDiv.textContent = 'No price found';
   } else {
     const actualPrice = ngStarInsertedDiv.textContent.trim();
     const actualPriceNumber = parseFloat(actualPrice.replace('$', '').replace(',', ''));
@@ -134,19 +170,30 @@ async function copyAndPasteItemName() {
     const discount = Math.round(differencePercentage);
 
     if (isNaN(discount)) {
-      newDiv.style.color = settings.neutralColor;
-      newDiv.textContent = `$${price}`;
+      newPriceDiv.style.color = settings.neutralColor;
+      newPriceDiv.textContent = `$${price}`;
     }
     else if (actualPriceNumber < price) {
-      newDiv.style.color = settings.profitColor;
-      newDiv.textContent = `$${price} (+${discount}%)`;
+      newPriceDiv.style.color = settings.profitColor;
+      newPriceDiv.textContent = `$${price} (+${discount}%)`;
     } else {
-      newDiv.style.color = settings.lossColor;
-      newDiv.textContent = `$${price} (${discount}%)`;
+      newPriceDiv.style.color = settings.lossColor;
+      newPriceDiv.textContent = `$${price} (${discount}%)`;
+    }
+    if(settings.enableStickers && stickerPrice) {
+      const priceWithStickers = price + stickerPrice
+      const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
+      const discountSticker = Math.round(differenceStickersPercentage);
+
+      if (discountSticker < 50 && discountSticker >= 0 || isNaN(discountSticker)) {
+        newStickerDiv.style.color = settings.profitColor;
+        newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
+      }  else {
+        newStickerDiv.style.color = settings.lossColor;
+        newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
+      }
     }
   }
-
-  parentDiv.appendChild(newDiv);
 
   // Create a link icon with a href
   const link = document.createElement('a');
@@ -154,9 +201,15 @@ async function copyAndPasteItemName() {
   link.target = '_blank';
   link.innerHTML = '<mat-icon _ngcontent-ele-c200="" role="img" class="mat-icon notranslate material-icons mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">link</mat-icon>';
   link.style.marginLeft = '10px';
-  parentDiv.appendChild(link);
+  
 
-  ngStarInsertedDiv.parentNode.insertBefore(parentDiv, ngStarInsertedDiv.nextSibling);
+  newPriceParentDiv.appendChild(newPriceDiv);
+  newPriceParentDiv.appendChild(link);
+  ngStarInsertedDiv.parentNode.insertBefore(newPriceParentDiv, ngStarInsertedDiv.nextSibling);
+  if(settings.enableStickers){
+    newStickerParentDiv.appendChild(newStickerDiv);
+    newPriceParentDiv.parentNode.insertBefore(newStickerParentDiv, newPriceParentDiv.nextSibling);
+  }
 }
 
 setInterval(() => {
