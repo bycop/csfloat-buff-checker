@@ -167,11 +167,11 @@ setInterval(() => {
   }
 }, 1000);
 
-chrome.runtime.sendMessage({ action: 'getSettings' }, function (response) {
+chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor'], function(response) {
   settings = {
-    enableStickers: response.enableStickers || true,
+    enableStickers: response.enableStickers || false,
     profitColor: response.profitColor || '#00FF00',
     lossColor: response.lossColor || '#FF0000',
     neutralColor: response.neutralColor || '#FFA500',
   }
-});
+});	  
