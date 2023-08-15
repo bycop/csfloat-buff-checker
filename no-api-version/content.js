@@ -110,11 +110,12 @@ async function getItemStickerPrice(container) {
     const stickerRef = stickerRefs[i];
     const stickerText = document.querySelector(`#${stickerRef}`).innerHTML;
     if(!stickerText.includes('0%')) continue;
-
+    
     const sticker = stickerText.match(/^.*(?=\s\d+%)/)
 
     const stickerPrice = await getBuffPrice(sticker);
-
+    if(stickerPrice.includes('N/A')) continue;
+    
     totalStickerPrice += stickerPrice;
   }
 
