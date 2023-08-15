@@ -114,8 +114,9 @@ async function getItemStickerPrice(container) {
     const sticker = stickerText.match(/^.*(?=\s\d+%)/)
 
     const stickerPrice = await getBuffPrice(sticker);
-    if(stickerPrice.includes('N/A')) continue;
-    
+
+    if(typeof(stickerPrice) != "number") continue;
+
     totalStickerPrice += stickerPrice;
   }
 
