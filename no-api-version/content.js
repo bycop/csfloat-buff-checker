@@ -56,6 +56,7 @@ async function getBuffPrice(name) {
       headers: {
         'Content-Type': 'application/json'
       },
+      referrer: "",
       body: JSON.stringify({
         "appId": "730",
         "markets": ["buff163"],
