@@ -8,9 +8,15 @@
 
 <body>
 	<h1>Extension Options</h1>
-	<h3>No need to save anything, it'll be automatically saved in the extension localStorage. F5 on CSFloat to see your changes</h3>
+	<h3>No need to save anything, it'll be automatically saved. Refresh (F5) on CSFloat to see your changes!</h3>
 	<label>
-		<input type="checkbox" id="enableStickers"> Enable Stickers Price Checker <strong>[Not available right now]</strong>
+		Enable Stickers Price Checker:
+		<input type="checkbox" id="enableStickers"> 
+	</label>
+	<br>
+	<label>
+		Sticker Value % Profit Threshold:
+		<input type="number" min="1" max="100" id="stickerThreshold"> 
 	</label>
 	<br>
 	<label>
