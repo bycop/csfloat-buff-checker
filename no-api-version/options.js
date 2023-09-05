@@ -16,12 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	enableStickersOption.addEventListener('change', () => {
 		const enableStickers = enableStickersOption.checked;
-		chrome.storage.local.set({'enableStickers': enableStickers});
+		chrome.storage.local.set({ 'enableStickers': enableStickers });
 	});
 
 	stickerThresholdOption.addEventListener('change', () => {
 		const stickerThreshold = stickerThresholdOption.value;
-		chrome.storage.local.set({'stickerThreshold': stickerThreshold});
+		chrome.storage.local.set({ 'stickerThreshold': stickerThreshold });
 	});
 
 	profitColorOption.addEventListener('change', () => {

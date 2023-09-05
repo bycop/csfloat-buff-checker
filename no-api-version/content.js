@@ -101,7 +101,7 @@ async function getItemStickerPrice(container) {
   const stickerContainer = findInContainer(itemContainer, 'sticker-container');
 
   if (!stickerContainer || !settings.enableStickers) return null;
-  
+
   const stickerRefs = [...stickerContainer.getElementsByTagName('img')].map(img =>
     img.getAttribute('aria-describedby')
   );
@@ -109,13 +109,13 @@ async function getItemStickerPrice(container) {
   for (let i = 0; i < stickerRefs.length; i++) {
     const stickerRef = stickerRefs[i];
     const stickerText = document.querySelector(`#${stickerRef}`).innerHTML;
-    if(!stickerText.includes('0%')) continue;
-    
+    if (!stickerText.includes('0%')) continue;
+
     const sticker = stickerText.match(/^.*(?=\s\d+%)/)
 
     const stickerPrice = await getBuffPrice(sticker);
 
-    if(typeof(stickerPrice) != "number") continue;
+    if (typeof (stickerPrice) != "number") continue;
 
     totalStickerPrice += stickerPrice;
   }
@@ -182,7 +182,7 @@ async function copyAndPasteItemName() {
       newPriceDiv.style.color = settings.lossColor;
       newPriceDiv.textContent = `$${price} (${discount}%)`;
     }
-    if(settings.enableStickers && stickerPrice) {
+    if (settings.enableStickers && stickerPrice) {
       const priceWithStickers = price + stickerPrice
       const differenceStickersPercentage = (actualPriceNumber / priceWithStickers) * 100;
       const discountSticker = Math.round(differenceStickersPercentage);
@@ -190,7 +190,7 @@ async function copyAndPasteItemName() {
       if (discountSticker < settings.stickerThreshold && discountSticker >= 0 || isNaN(discountSticker)) {
         newStickerDiv.style.color = settings.profitColor;
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
-      }  else {
+      } else {
         newStickerDiv.style.color = settings.lossColor;
         newStickerDiv.textContent = `${discountSticker}% SV ($${priceWithStickers.toFixed(2)} CV)`;
       }
@@ -203,12 +203,12 @@ async function copyAndPasteItemName() {
   link.target = '_blank';
   link.innerHTML = '<mat-icon _ngcontent-ele-c200="" role="img" class="mat-icon notranslate material-icons mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">link</mat-icon>';
   link.style.marginLeft = '10px';
-  
+
 
   newPriceParentDiv.appendChild(newPriceDiv);
   newPriceParentDiv.appendChild(link);
   ngStarInsertedDiv.parentNode.insertBefore(newPriceParentDiv, ngStarInsertedDiv.nextSibling);
-  if(settings.enableStickers){
+  if (settings.enableStickers) {
     newStickerParentDiv.appendChild(newStickerDiv);
     newPriceParentDiv.parentNode.insertBefore(newStickerParentDiv, newPriceParentDiv.nextSibling);
   }
@@ -222,7 +222,7 @@ setInterval(() => {
   }
 }, 1000);
 
-chrome.storage.local.get(['enableStickers', 'stickerThreshold', 'profitColor', 'lossColor', 'neutralColor'], (response) => {
+chrome.runtime.sendMessage({ action: 'getSettings' }, function (response) {
   settings = {
     enableStickers: response.enableStickers || false,
     stickerThreshold: response.stickerThreshold || 50,
