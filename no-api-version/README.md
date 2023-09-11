@@ -13,6 +13,9 @@ Then you'll have this page to customize the extension
 <img src="../assets/options.png" width="75%"/>
 
 ### Usage
+
+You'll have to follow this tutorial to make it works https://youtu.be/UPiSwkXvgQw
+
 If the extension is well installed you can just go on any item on csfloat.com and you'll see the price comparison with Buff.
 
 You'll see the Buff price on all items url like https://csfloat.com/item/id 
