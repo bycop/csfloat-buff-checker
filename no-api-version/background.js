@@ -20,12 +20,13 @@ chrome.action.onClicked.addListener(function (tab) {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.action === 'getSettings') {
-		chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor'], function (result) {
+		chrome.storage.local.get(['enableStickers', 'profitColor', 'lossColor', 'neutralColor', 'sihToken'], function (result) {
 			const settings = {
 				enableStickers: result.enableStickers || true,
 				profitColor: result.profitColor || '#00FF00',
 				lossColor: result.lossColor || '#FF0000',
-				neutralColor: result.neutralColor || '#FFA500'
+				neutralColor: result.neutralColor || '#FFA500',
+				sihToken: result.sihToken || ''
 			};
 			sendResponse(settings);
 		});

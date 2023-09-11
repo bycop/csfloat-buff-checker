@@ -54,7 +54,8 @@ async function getBuffPrice(name) {
     const response = await fetch('https://api.steaminventoryhelper.com/v2/live-prices/getPrices', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "x-sih-token": settings.sihToken || ''
       },
       referrer: "",
       body: JSON.stringify({
@@ -135,8 +136,16 @@ async function copyAndPasteItemName() {
     const discount = Math.round(differencePercentage);
 
     if (isNaN(discount)) {
-      newDiv.style.color = settings.neutralColor;
-      newDiv.textContent = `$${price}`;
+      if (price == "OLD SIH, UPDATE PLEASE VERSION") {
+        const link = document.createElement('a');
+        link.setAttribute('href', `https://youtu.be/UPiSwkXvgQw`);
+        link.textContent = 'Need to set your SIH token, click here';
+        newDiv.appendChild(link);
+      }
+      else {
+        newDiv.style.color = settings.neutralColor;
+        newDiv.textContent = `$${price}`;
+      }
     }
     else if (actualPriceNumber < price) {
       newDiv.style.color = settings.profitColor;
@@ -174,5 +183,6 @@ chrome.runtime.sendMessage({ action: 'getSettings' }, function (response) {
     profitColor: response.profitColor || '#00FF00',
     lossColor: response.lossColor || '#FF0000',
     neutralColor: response.neutralColor || '#FFA500',
+    sihToken: response.sihToken || '',
   }
 });
