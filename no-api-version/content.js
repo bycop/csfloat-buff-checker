@@ -25,11 +25,11 @@ function parseItem(name, details) {
 
   if (specialMatch) {
     item.special = specialMatch[0];
-    details = details.replace(specialMatch[0], "").replace('(', '').replace(')', '').trim();
+    details = details.replace(specialMatch[0], "");
   }
 
   if (details) {
-    item.details = details;
+    item.details = details.replace('(', '').replace(')', '').trim();
   }
 
   const whitelistedStarts = ["Autograph Capsule"];
@@ -41,6 +41,19 @@ function parseItem(name, details) {
   return item;
 }
 
+function getDiscount(buffPrice, listingPrice) {
+  const discountPercentage = ((listingPrice - buffPrice) / listingPrice) * 100;
+
+  if (isNaN(discountPercentage) || discountPercentage === 0) {
+    return null;
+  }
+
+  const displayDiscountPercentage = Math.abs(discountPercentage);
+  const sign = discountPercentage > 0 ? '-' : '+';
+
+  return `${sign}${displayDiscountPercentage.toFixed(2)}%`;
+}
+
 function formatItem(item) {
   if (item.details && item.details.endsWith("Sticker")) {
     return `Sticker | ${item.name}`;
@@ -49,25 +62,22 @@ function formatItem(item) {
   return `${item.star ? "★ " : ""}${item.special ? item.special + " " : ""}${item.name}${item.quality !== "Not painted" ? ` (${item.quality})` : ''}`;
 }
 
-async function getBuffPrice(name) {
+async function getBuffPrice(item) {
+  const name = formatItem(item);
+
   try {
-    const response = await fetch('https://api.steaminventoryhelper.com/v2/live-prices/getPrices', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        "x-sih-token": settings.sihToken || ''
-      },
-      referrer: "",
-      body: JSON.stringify({
-        "appId": "730",
-        "markets": ["buff163"],
-        "items": [name]
-      })
-    });
+    let url = new URL('https://tradelounge.gg/api/item');
 
-    const data = await response.json();
+    url.searchParams.append('marketName', name);
 
-    return data?.items[name]?.buff163?.price || "N/A";
+    if ((item.quality && item.quality !== "Not painted") && item.details) {
+      url.searchParams.append('phase', item.details);
+    }
+
+    const response = await fetch(url);
+    const data = await response.json().catch(() => { });
+
+    return data?.price || "N/A";
   } catch (error) {
     console.error('Error fetching data:', error);
     return "N/A";
@@ -110,9 +120,8 @@ async function copyAndPasteItemName() {
   const ngStarInsertedDiv = cdkOverlayContainer.querySelector('.price.ng-star-inserted, .price .ng-star-inserted');
 
   const item = parseItem(itemNameElement.innerText, divTextContent);
-  const name = formatItem(item);
 
-  const price = await getBuffPrice(name);
+  const price = await getBuffPrice(item);
 
   if (!ngStarInsertedDiv) return null;
 
@@ -131,28 +140,17 @@ async function copyAndPasteItemName() {
     const actualPrice = ngStarInsertedDiv.textContent.trim();
     const actualPriceNumber = parseFloat(actualPrice.replace('$', '').replace(',', ''));
 
-    const difference = price - actualPriceNumber;
-    const differencePercentage = (difference / actualPriceNumber) * 100;
-    const discount = Math.round(differencePercentage);
+    const discount = getDiscount(actualPriceNumber, price);
 
-    if (isNaN(discount)) {
-      if (price == "OLD SIH, UPDATE PLEASE VERSION") {
-        const link = document.createElement('a');
-        link.setAttribute('href', `https://youtu.be/UPiSwkXvgQw`);
-        link.textContent = 'Need to set your SIH token, click here';
-        newDiv.appendChild(link);
-      }
-      else {
-        newDiv.style.color = settings.neutralColor;
-        newDiv.textContent = `$${price}`;
-      }
-    }
-    else if (actualPriceNumber < price) {
+    if (discount?.startsWith('-')) {
       newDiv.style.color = settings.profitColor;
-      newDiv.textContent = `$${price} (+${discount}%)`;
-    } else {
+      newDiv.textContent = `$${price} (${discount})`;
+    } else if (discount?.startsWith('+')) {
       newDiv.style.color = settings.lossColor;
-      newDiv.textContent = `$${price} (${discount}%)`;
+      newDiv.textContent = `$${price} (${discount})`;
+    } else {
+      newDiv.style.color = settings.neutralColor;
+      newDiv.textContent = `$${price}`;
     }
   }
 

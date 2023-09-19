@@ -1,5 +1,5 @@
 function injectContentScript(tabId) {
-	if (chrome.scription) {
+	if (chrome.scripting && false) { // Disabled for this version
 		chrome.scripting.executeScript({
 			target: { tabId: tabId },
 			files: ['content.js'],
