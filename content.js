@@ -158,7 +158,7 @@ async function copyAndPasteItemName() {
 
   // Create a link icon with a href
   const link = document.createElement('a');
-  link.href = `https://t.sih-db.com/15GzoA?subid1=%2Fmarket%2Fcsgo%23tab%3Dselling%26page_num%3D1%26search%3D${name}&subid2=buff163-side-menu`;
+  link.href = `https://t.sih-db.com/15GzoA?subid1=%2Fmarket%2Fcsgo%23tab%3Dselling%26page_num%3D1%26search%3D${formatItem(item)}&subid2=buff163-side-menu`;
   link.target = '_blank';
   link.innerHTML = '<mat-icon _ngcontent-ele-c200="" role="img" class="mat-icon notranslate material-icons mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">link</mat-icon>';
   link.style.marginLeft = '10px';
