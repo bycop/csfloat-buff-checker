@@ -1,5 +1,8 @@
 # CSFloat - Buff prices checker
 
+# ⚠️ DEPRECATION & Maintained project
+This repo is no longer maintained due to contributing to BetterFloat, an other extension with lot of features for CSFloat, skinport and skinbid. Please use their extension available here: https://github.com/GODrums/BetterFloat
+
 ### Installation
 - Download or clone this repository
 - Put your chrome / chromium in dev mode on the `chrome://extensions`
